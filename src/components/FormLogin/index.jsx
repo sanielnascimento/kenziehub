@@ -11,7 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { api } from "../../services/api";
 import { useNavigate } from "react-router-dom";
 
-export const FormLogin = ({ toRegister, setUser, setLoading }) => {
+export const FormLogin = ({ toRegister, setUser, setLoading, }) => {
   const navigate = useNavigate();
   const loginSchema = yup.object().shape({
     email: yup.string().required("Email obrigatório!"),
