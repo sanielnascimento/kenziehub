@@ -9,14 +9,17 @@ import { SelectS } from "../../styles/components/Select";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { api } from "../../services/api";
+import { useNavigate } from "react-router-dom";
+
 
 export const FormRegister = () => {
+  const navigate = useNavigate();
   const registerSchema = yup.object().shape({
     name: yup
       .string()
       .required("Nome obrigatório!")
-      .min(3, "O nome precisa de um mínimo de 3 caracteres")
-      .max(200, "O nome pode ter no máximo 200 caracteres."),
+      .min(6, "O nome precisa de um mínimo de 6 caracteres")
+      .max(150, "O nome pode ter no máximo 150 caracteres."),
     email: yup
       .string()
       .required("Email obrigatório!")
@@ -55,7 +58,7 @@ export const FormRegister = () => {
   const submit = async (data) => {
     try {
       const resp = await api.post("/users", data);
-      console.log(resp);
+      navigate("/")
     } catch (error) {
       console.error(error);
     }

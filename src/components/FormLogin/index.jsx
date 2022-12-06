@@ -9,8 +9,10 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { api } from "../../services/api";
+import { useNavigate } from "react-router-dom";
 
-export const FormLogin = ({ toRegister }) => {
+export const FormLogin = ({ toRegister, setUser, setLoading }) => {
+  const navigate = useNavigate();
   const loginSchema = yup.object().shape({
     email: yup.string().required("Email obrigatório!"),
     password: yup.string().required("Senha obrigatória!"),
@@ -27,12 +29,18 @@ export const FormLogin = ({ toRegister }) => {
 
   const submit = async (data) => {
     try {
-      const resp = await api.post("/sessions", { ...data });
-      console.log(resp);
+      setLoading(true)
+      const resp = await api.post("/sessions", data);
+      setUser(resp.data.user)
+      localStorage.setItem("@TOKEN", JSON.stringify(resp.data.token))
+      localStorage.setItem("@USERID", JSON.stringify(resp.data.user.id))
+      navigate("/home")
     } catch (error) {
       console.error(error);
+    }finally{
+      setLoading(false)
     }
-    console.log({...data});
+    console.log(data);
   };
 
   return (

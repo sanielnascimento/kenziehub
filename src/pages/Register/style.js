@@ -12,7 +12,7 @@ export const RegisterS = styled.div`
 
   .RegisterHeader{
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     width: 100%;
     height: 130px;

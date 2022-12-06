@@ -5,19 +5,12 @@ import { FormRegister } from "../../components/FormRegister";
 import { RegisterS } from "./style";
 import { ContainerS } from "../../styles/components/Container";
 import { HeaderS } from "../../styles/components/Header";
-
-
+import {HeaderButtonS} from "../../styles/components/HeaderButton";
 
 export const RegisterPage = () => {
   const navigate = useNavigate();
 
-  const registerSubmit = (e) => {
-    e.preventDefault();
-    navigate("/login");
-  };
-
   const back = () => navigate(-1);
-  const toLogin = () => navigate("/login");
 
   return (
     <RegisterS>
@@ -25,6 +18,7 @@ export const RegisterPage = () => {
         <ContainerS>
           <div className="RegisterHeader">
             <img src={logo} alt="Kenziehub" />
+            <HeaderButtonS type="button" onClick={back} >Voltar</HeaderButtonS>            
           </div>
         </ContainerS>
       </HeaderS>

@@ -1,25 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../../Logo.png";
 import { useNavigate } from "react-router-dom";
 import { FormLogin } from "../../components/FormLogin";
 import { ContainerS } from "../../styles/components/Container";
 import { HeaderS } from "../../styles/components/Header";
 import { LoginS } from "./style";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-export const LoginPage = () => {
+export const LoginPage = ({ setUser }) => {
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
-  const loginSubmit = (e) => {
-    const name = "Saniel";
-    e.preventDefault();
-    navigate(`/home/${name}`);
-  };
+  loading && (
+    toast.info('🦄 Carregando!', {
+      position: "top-left",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      }));
 
-  const back = () => navigate(-1);
   const toRegister = () => navigate("/register");
 
   return (
     <LoginS>
+      <ToastContainer />
       <HeaderS>
         <ContainerS>
           <figure className="LoginHeader">
@@ -28,7 +38,11 @@ export const LoginPage = () => {
         </ContainerS>
       </HeaderS>
       <ContainerS>
-        <FormLogin toRegister={toRegister}/>
+        <FormLogin
+          toRegister={toRegister}
+          setUser={setUser}
+          setLoading={setLoading}
+        />
       </ContainerS>
     </LoginS>
   );
