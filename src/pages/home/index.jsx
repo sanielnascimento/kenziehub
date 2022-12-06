@@ -1,30 +1,50 @@
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { api } from '../../services/api';
+import logo from "../../Logo.png";
+import { HomeS } from "./syle";
+import { HeaderS } from "../../styles/components/Header";
+import { HeaderButtonS } from "../../styles/components/HeaderButton";
+import { Title1 } from "../../styles/components/Title1";
+import { HomeContainerS } from "../../styles/components/HomeContainer";
+import { useNavigate } from "react-router-dom";
 
-export const HomePage = () => {
-  const [array1 , setArray1] = useState([]);
+export const HomePage = ({ user, setUser }) => {
+  const navigate = useNavigate();
+  const { name, course_module } = user;
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await api.get('/users');
-        console.log(response.data);
-        setArray1(response.data);        
-      } catch (error) {
-        console.log(error);        
-      }finally{
-      }
-    })();
-  },[])
+  const loggout = () => {
+    navigate("/");
+    setUser({});
+    localStorage.clear();
+  };
 
-  console.log(array1);
-
-  const params = useParams();
-  console.log(params);
   return (
-    <div>
-      <h1>Seja muito bem-vindo {params.name}</h1>
-    </div>
-  )
-}
+    <HomeS>
+      <HeaderS>
+        <HomeContainerS>
+          <div className="HomeHeader">
+            <img src={logo} alt="Kenzie hub" />
+            <HeaderButtonS onClick={loggout}>Sair</HeaderButtonS>
+          </div>
+        </HomeContainerS>
+      </HeaderS>
+      <div className="UserInfoBox">
+        <HomeContainerS>
+          <div className="UserInfo">
+            <Title1>Olá, {name}</Title1>
+            <span>{course_module}</span>
+          </div>
+        </HomeContainerS>
+      </div>
+      <div className="MainContent">
+        <HomeContainerS>
+          <div className="AppStatus">
+            <Title1>Que pena! Estamos em desenvolvimento :(</Title1>
+            <p>
+              Nossa aplicação está em desenvolvimento, em breve teremos
+              novidades
+            </p>
+          </div>
+        </HomeContainerS>
+      </div>
+    </HomeS>
+  );
+};

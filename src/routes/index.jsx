@@ -9,7 +9,7 @@ export const RoutesMain = ({user, setUser}) => {
     <Routes>
       <Route path="/" element={<LoginPage user={user} setUser={setUser} />} />
       <Route path="register" element={<RegisterPage />} />
-      <Route path="home/:name" element={<HomePage />} />
+      <Route path="home/" element={<HomePage user={user} setUser={setUser} />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   )
