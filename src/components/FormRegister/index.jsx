@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { SelectS } from "../../styles/components/Select";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { api } from "../../services/api";
 
 export const FormRegister = () => {
   const registerSchema = yup.object().shape({
@@ -31,87 +32,99 @@ export const FormRegister = () => {
         "É necessário ao menos uma caractere especial!"
       )
       .min(8, "Sua senha deve ter ao menos 8 caracteres!"),
+
+    passwordConfirmation: yup
+      .string()
+      .required("Confirmação obrigatória!")
+      .oneOf([yup.ref("password")], "As senhas devem coincidir"),
+
     bio: yup.string().required("Bio obrigatória!"),
-    contact: yup.string().required("Número de contato obrigatório!"),
+    contact: yup.string().required("Informação de contato obrigatória!"),
     course_module: yup.string().required("Módulo Obrigatório!"),
   });
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
+    mode: "onChange",
     resolver: yupResolver(registerSchema),
   });
 
-  const submit = (data) => {
+  const submit = async (data) => {
+    try {
+      const resp = await api.post("/users", data);
+      console.log(resp);
+    } catch (error) {
+      console.error(error);
+    }
     console.log(data);
   };
 
   return (
-    <FormS onSubmit={handleSubmit(submit)}>
+    <FormS onSubmit={handleSubmit(submit)} noValidate>
       <Title1>Crie sua conta</Title1>
       <HeadlineBoldS>Rápido e grátis, vamos nessa!</HeadlineBoldS>
       <div className="InputBox">
         <LabelS htmlFor="">Nome</LabelS>
-        <InputS
-          type="text"
-          placeholder="Digite aqui seu nome"
-          {...register("name")}
-        />
+        <InputS placeholder="Digite aqui seu nome" {...register("name")} />
         {errors.name?.message && <p>{errors.name.message}</p>}
       </div>
       <div className="InputBox">
         <LabelS htmlFor="">Email</LabelS>
-        <InputS
-          type="email"
-          placeholder="Digite aqui seu email"
-          {...register("email")}
-        />
+        <InputS placeholder="Digite aqui seu email" {...register("email")} />
         {errors.email?.message && <p>{errors.email.message}</p>}
       </div>
       <div className="InputBox">
         <LabelS htmlFor="">Senha</LabelS>
-        <InputS type="password" placeholder="Digite aqui sua senha" />
+        <InputS
+          type="password"
+          placeholder="Digite aqui sua senha"
+          {...register("password")}
+        />
       </div>
       <div className="InputBox">
         <LabelS htmlFor="">Confirmar senha</LabelS>
         <InputS
           type="password"
           placeholder="Digite novamente sua senha"
-          {...register("password")}
+          {...register("passwordConfirmation")}
         />
-        {errors.password?.message && <p>{errors.password.message}</p>}
+        {errors.passwordConfirmation?.message && (
+          <p>{errors.passwordConfirmation.message}</p>
+        )}
       </div>
       <div className="InputBox">
         <LabelS htmlFor="">Bio</LabelS>
-        <InputS
-          type="text"
-          placeholder="Fale sobre você"
-          {...register("bio")}
-        />
+        <InputS placeholder="Fale sobre você" {...register("bio")} />
         {errors.bio?.message && <p>{errors.bio.message}</p>}
       </div>
       <div className="InputBox">
         <LabelS htmlFor="">Contato</LabelS>
-        <InputS
-          type="tel"
-          placeholder="Opção de conato"
-          {...register("contact")}
-        />
+        <InputS placeholder="Opção de conato" {...register("contact")} />
         {errors.contact?.message && <p>{errors.contact.message}</p>}
       </div>
       <div className="InputBox">
         <LabelS htmlFor="">Módulo</LabelS>
         <SelectS {...register("course_module")}>
           <option value="">Selecionar Módulo</option>
-          <option value="1o Módulo">Primeiro módulo</option>
-          <option value="2o Módulo">Segundo Módulo</option>
-          <option value="3o Módulo">Terceiro Módulo</option>
+          <option value="Primeiro módulo (Introdução ao Frontend)">
+            Primeiro módulo
+          </option>
+          <option value="Segundo módulo (Frontend Avançado)">
+            Segundo Módulo
+          </option>
+          <option value="Terceiro módulo (Introdução ao Backend)">
+            Terceiro Módulo
+          </option>
+          <option value="Quarto módulo (Backend Avançado)">
+            Quarto Módulo
+          </option>
         </SelectS>
         {errors.course_module?.message && <p>{errors.course_module.message}</p>}
-
       </div>
-      <PrimaryButtonS type="submit">Entrar</PrimaryButtonS>
+      <PrimaryButtonS type="submit">Criar conta</PrimaryButtonS>
     </FormS>
   );
 };

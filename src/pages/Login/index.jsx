@@ -28,7 +28,7 @@ export const LoginPage = () => {
         </ContainerS>
       </HeaderS>
       <ContainerS>
-        <FormLogin />
+        <FormLogin toRegister={toRegister}/>
       </ContainerS>
     </LoginS>
   );
