@@ -14,6 +14,7 @@ export const InputS = styled.input`
   font-weight: 400;
   font-size: 1rem;
   line-height: 163%;
+  color: var(--grey0);
 
   ::placeholder {
     color: var(--grey1);

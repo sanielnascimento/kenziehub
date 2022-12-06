@@ -11,7 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { api } from "../../services/api";
 import { useNavigate } from "react-router-dom";
 
-export const FormLogin = ({ toRegister, setUser, setLoading }) => {
+export const FormLogin = ({ toRegister, setUser, setLoading, }) => {
   const navigate = useNavigate();
   const loginSchema = yup.object().shape({
     email: yup.string().required("Email obrigatório!"),
@@ -40,7 +40,6 @@ export const FormLogin = ({ toRegister, setUser, setLoading }) => {
     }finally{
       setLoading(false)
     }
-    console.log(data);
   };
 
   return (
@@ -53,7 +52,7 @@ export const FormLogin = ({ toRegister, setUser, setLoading }) => {
           placeholder="Digite aqui seu email"
           {...register("email")}
         />
-        {errors.email?.message && <p>{errors.email.message}</p>}
+        {errors.email?.message && <p className="error">{errors.email.message}</p>}
       </div>
       <div className="InputBox">
         <LabelS htmlFor="">Senha</LabelS>
@@ -62,7 +61,7 @@ export const FormLogin = ({ toRegister, setUser, setLoading }) => {
           placeholder="Digite aqui sua senha"
           {...register("password")}
         />
-        {errors.password?.message && <p>{errors.password.message}</p>}
+        {errors.password?.message && <p className="error">{errors.password.message}</p>}
       </div>
       <PrimaryButtonS type="submit">Entrar</PrimaryButtonS>
       <HeadlineBoldS>Ainda não possui uma conta?</HeadlineBoldS>

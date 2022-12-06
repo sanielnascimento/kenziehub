@@ -11,8 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { api } from "../../services/api";
 import { useNavigate } from "react-router-dom";
 
-
-export const FormRegister = () => {
+export const FormRegister = ({setLoading}) => {
   const navigate = useNavigate();
   const registerSchema = yup.object().shape({
     name: yup
@@ -57,12 +56,15 @@ export const FormRegister = () => {
 
   const submit = async (data) => {
     try {
+      setLoading(true)
+      // eslint-disable-next-line no-unused-vars
       const resp = await api.post("/users", data);
-      navigate("/")
+      navigate("/");
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false)
     }
-    console.log(data);
   };
 
   return (
@@ -72,12 +74,12 @@ export const FormRegister = () => {
       <div className="InputBox">
         <LabelS htmlFor="">Nome</LabelS>
         <InputS placeholder="Digite aqui seu nome" {...register("name")} />
-        {errors.name?.message && <p>{errors.name.message}</p>}
+        {errors.name?.message && <p className="error">{errors.name.message}</p>}
       </div>
       <div className="InputBox">
         <LabelS htmlFor="">Email</LabelS>
         <InputS placeholder="Digite aqui seu email" {...register("email")} />
-        {errors.email?.message && <p>{errors.email.message}</p>}
+        {errors.email?.message && <p className="error">{errors.email.message}</p>}
       </div>
       <div className="InputBox">
         <LabelS htmlFor="">Senha</LabelS>
@@ -85,7 +87,8 @@ export const FormRegister = () => {
           type="password"
           placeholder="Digite aqui sua senha"
           {...register("password")}
-        />
+          />
+          {errors.password?.message && <p className="error">{errors.password.message}</p>}
       </div>
       <div className="InputBox">
         <LabelS htmlFor="">Confirmar senha</LabelS>
@@ -93,20 +96,20 @@ export const FormRegister = () => {
           type="password"
           placeholder="Digite novamente sua senha"
           {...register("passwordConfirmation")}
-        />
+          />
         {errors.passwordConfirmation?.message && (
-          <p>{errors.passwordConfirmation.message}</p>
-        )}
+          <p className="error">{errors.passwordConfirmation.message}</p>
+          )}
       </div>
       <div className="InputBox">
         <LabelS htmlFor="">Bio</LabelS>
         <InputS placeholder="Fale sobre você" {...register("bio")} />
-        {errors.bio?.message && <p>{errors.bio.message}</p>}
+        {errors.bio?.message && <p className="error">{errors.bio.message}</p>}
       </div>
       <div className="InputBox">
         <LabelS htmlFor="">Contato</LabelS>
         <InputS placeholder="Opção de conato" {...register("contact")} />
-        {errors.contact?.message && <p>{errors.contact.message}</p>}
+        {errors.contact?.message && <p className="error">{errors.contact.message}</p>}
       </div>
       <div className="InputBox">
         <LabelS htmlFor="">Módulo</LabelS>
@@ -125,7 +128,7 @@ export const FormRegister = () => {
             Quarto Módulo
           </option>
         </SelectS>
-        {errors.course_module?.message && <p>{errors.course_module.message}</p>}
+        {errors.course_module?.message && <p className="error">{errors.course_module.message}</p>}
       </div>
       <PrimaryButtonS type="submit">Criar conta</PrimaryButtonS>
     </FormS>

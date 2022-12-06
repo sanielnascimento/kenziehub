@@ -22,4 +22,8 @@ export const FormS = styled.form`
     gap: 22px;
     width: 100%;
   }
+
+  .error{
+    color: var(--negative);
+  }
 `;
