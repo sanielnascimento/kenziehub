@@ -4,19 +4,18 @@ import { HeaderS } from "../../styles/components/Header";
 import { HeaderButtonS } from "../../styles/components/HeaderButton";
 import { Title1 } from "../../styles/components/Title1";
 import { HomeContainerS } from "../../styles/components/HomeContainer";
-import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../../contexts/UserContext";
+import { Navigate } from "react-router-dom";
 
-export const HomePage = ({ user, setUser }) => {
-  const navigate = useNavigate();
-  const { name, course_module } = user;
+export const HomePage = () => {
+  const { user, loggout, homeLoading } = useContext(UserContext);
 
-  const loggout = () => {
-    navigate("/");
-    setUser({});
-    localStorage.clear();
-  };
+  if (homeLoading) {
+    return null;
+  }
 
-  return (
+  return user ? (
     <HomeS>
       <HeaderS>
         <HomeContainerS>
@@ -29,8 +28,8 @@ export const HomePage = ({ user, setUser }) => {
       <div className="UserInfoBox">
         <HomeContainerS>
           <div className="UserInfo">
-            <Title1>Olá, {name}</Title1>
-            <span>{course_module}</span>
+            <Title1>Olá, {user.name}</Title1>
+            <span>{user.course_module}</span>
           </div>
         </HomeContainerS>
       </div>
@@ -46,5 +45,7 @@ export const HomePage = ({ user, setUser }) => {
         </HomeContainerS>
       </div>
     </HomeS>
+  ) : (
+    <Navigate to="/" />
   );
 };

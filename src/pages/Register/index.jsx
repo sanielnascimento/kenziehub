@@ -1,6 +1,4 @@
-import React, { useState } from "react";
 import logo from "../../Logo.png";
-import { useNavigate } from "react-router-dom";
 import { FormRegister } from "../../components/FormRegister";
 import { RegisterS } from "./style";
 import { ContainerS } from "../../styles/components/Container";
@@ -8,10 +6,12 @@ import { HeaderS } from "../../styles/components/Header";
 import {HeaderButtonS} from "../../styles/components/HeaderButton";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useContext } from "react";
+import { UserContext } from "../../contexts/UserContext";
 
 
 export const RegisterPage = () => {
-  const [loading, setLoading] = useState(false);
+  const {loading, navigate} = useContext(UserContext);
 
   loading && (
     toast.info('🦄 Carregando!', {
@@ -25,10 +25,6 @@ export const RegisterPage = () => {
       theme: "colored",
       }));
 
-  const navigate = useNavigate();
-
-  const back = () => navigate(-1);
-
   return (
     <RegisterS>
       <ToastContainer/>
@@ -36,12 +32,12 @@ export const RegisterPage = () => {
         <ContainerS>
           <div className="RegisterHeader">
             <img src={logo} alt="Kenziehub" />
-            <HeaderButtonS type="button" onClick={back} >Voltar</HeaderButtonS>            
+            <HeaderButtonS type="button" onClick={() => navigate(-1)} >Voltar</HeaderButtonS>            
           </div>
         </ContainerS>
       </HeaderS>
       <ContainerS>
-        <FormRegister setLoading={setLoading} />
+        <FormRegister />
       </ContainerS>
     </RegisterS>
   );

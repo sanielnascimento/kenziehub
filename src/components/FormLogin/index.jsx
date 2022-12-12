@@ -8,11 +8,12 @@ import { FormS } from "../../styles/components/Form";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { api } from "../../services/api";
-import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../../contexts/UserContext";
 
-export const FormLogin = ({ toRegister, setUser, setLoading, }) => {
-  const navigate = useNavigate();
+export const FormLogin = () => {
+  const { navigate, submitLogin } = useContext(UserContext);
+
   const loginSchema = yup.object().shape({
     email: yup.string().required("Email obrigatório!"),
     password: yup.string().required("Senha obrigatória!"),
@@ -27,23 +28,8 @@ export const FormLogin = ({ toRegister, setUser, setLoading, }) => {
     resolver: yupResolver(loginSchema),
   });
 
-  const submit = async (data) => {
-    try {
-      setLoading(true)
-      const resp = await api.post("/sessions", data);
-      setUser(resp.data.user)
-      localStorage.setItem("@TOKEN", JSON.stringify(resp.data.token))
-      localStorage.setItem("@USERID", JSON.stringify(resp.data.user.id))
-      navigate("/home")
-    } catch (error) {
-      console.error(error);
-    }finally{
-      setLoading(false)
-    }
-  };
-
   return (
-    <FormS onSubmit={handleSubmit(submit)} noValidate>
+    <FormS onSubmit={handleSubmit(submitLogin)} noValidate>
       <Title1>Login</Title1>
       <div className="InputBox">
         <LabelS htmlFor="">Email</LabelS>
@@ -52,7 +38,9 @@ export const FormLogin = ({ toRegister, setUser, setLoading, }) => {
           placeholder="Digite aqui seu email"
           {...register("email")}
         />
-        {errors.email?.message && <p className="error">{errors.email.message}</p>}
+        {errors.email?.message && (
+          <p className="error">{errors.email.message}</p>
+        )}
       </div>
       <div className="InputBox">
         <LabelS htmlFor="">Senha</LabelS>
@@ -61,11 +49,13 @@ export const FormLogin = ({ toRegister, setUser, setLoading, }) => {
           placeholder="Digite aqui sua senha"
           {...register("password")}
         />
-        {errors.password?.message && <p className="error">{errors.password.message}</p>}
+        {errors.password?.message && (
+          <p className="error">{errors.password.message}</p>
+        )}
       </div>
       <PrimaryButtonS type="submit">Entrar</PrimaryButtonS>
       <HeadlineBoldS>Ainda não possui uma conta?</HeadlineBoldS>
-      <DisabledButtonS type="button" onClick={toRegister}>
+      <DisabledButtonS type="button" onClick={() => navigate("/register")}>
         Cadastre-se
       </DisabledButtonS>
     </FormS>
