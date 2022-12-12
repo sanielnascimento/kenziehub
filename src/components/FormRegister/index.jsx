@@ -8,11 +8,12 @@ import { useForm } from "react-hook-form";
 import { SelectS } from "../../styles/components/Select";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { api } from "../../services/api";
-import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../../contexts/UserContext";
 
-export const FormRegister = ({setLoading}) => {
-  const navigate = useNavigate();
+export const FormRegister = () => {
+  const { submitRegister} = useContext(UserContext);
+
   const registerSchema = yup.object().shape({
     name: yup
       .string()
@@ -34,12 +35,10 @@ export const FormRegister = ({setLoading}) => {
         "É necessário ao menos uma caractere especial!"
       )
       .min(8, "Sua senha deve ter ao menos 8 caracteres!"),
-
     passwordConfirmation: yup
       .string()
       .required("Confirmação obrigatória!")
       .oneOf([yup.ref("password")], "As senhas devem coincidir"),
-
     bio: yup.string().required("Bio obrigatória!"),
     contact: yup.string().required("Informação de contato obrigatória!"),
     course_module: yup.string().required("Módulo Obrigatório!"),
@@ -54,21 +53,8 @@ export const FormRegister = ({setLoading}) => {
     resolver: yupResolver(registerSchema),
   });
 
-  const submit = async (data) => {
-    try {
-      setLoading(true)
-      // eslint-disable-next-line no-unused-vars
-      const resp = await api.post("/users", data);
-      navigate("/");
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false)
-    }
-  };
-
   return (
-    <FormS onSubmit={handleSubmit(submit)} noValidate>
+    <FormS onSubmit={handleSubmit(submitRegister)} noValidate>
       <Title1>Crie sua conta</Title1>
       <HeadlineBoldS>Rápido e grátis, vamos nessa!</HeadlineBoldS>
       <div className="InputBox">
